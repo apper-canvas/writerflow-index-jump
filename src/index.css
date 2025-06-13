@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import react-toastify CSS */
+@import 'react-toastify/dist/ReactToastify.css';
+
+/* Ensure scrollbars are visible */
+body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
+  min-height: 100vh;
+  background-color: #F5F3F0;
+}
+
+/* Prevent horizontal overflow */
+* {
+  max-width: 100%;
+}
+
+/* Main content areas must allow scroll */
+.main-content {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+@layer utilities {
+  /* Only use scrollbar-hide for specific UI elements, never main content */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Custom checkbox animation */
+.checkbox-animation {
+  transition: all 0.2s ease;
+}
+
+/* Progress bar gradient */
+.progress-gradient {
+  background: linear-gradient(90deg, #3498DB 0%, #27AE60 100%);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.2s ease-out;
+}
+
+.card-hover:hover {
+  transform: scale(1.02);
+}
+
+/* Status badge styles */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-ideas {
+  background-color: #E8F4FD;
+  color: #1565C0;
+}
+
+.status-drafting {
+  background-color: #FFF3E0;
+  color: #EF6C00;
+}
+
+.status-editing {
+  background-color: #F3E5F5;
+  color: #7B1FA2;
+}
+
+.status-submitted {
+  background-color: #E8F5E8;
+  color: #2E7D32;
+}
+
+.status-published {
+  background-color: #E8F5E8;
+  color: #1B5E20;
+}
+
+/* Deadline indicator dots */
+.deadline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.deadline-safe {
+  background-color: #27AE60;
+}
+
+.deadline-warning {
+  background-color: #F39C12;
+}
+
+.deadline-urgent {
+  background-color: #E74C3C;
+}
+
+/* Project folder effect */
+.project-folder {
+  position: relative;
+  background: linear-gradient(135deg, #FAFAFA 0%, #F0F0F0 100%);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project-folder::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  background: inherit;
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}

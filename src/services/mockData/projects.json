@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "TechCorp Marketing Blog",
+    "color": "#3498DB",
+    "description": "Weekly blog posts for B2B SaaS marketing topics and thought leadership content",
+    "taskCount": 3
+  },
+  {
+    "id": "2",
+    "name": "SEO Resource Hub",
+    "color": "#27AE60",
+    "description": "Comprehensive SEO guides and tutorials for digital marketing agency clients",
+    "taskCount": 1
+  },
+  {
+    "id": "3",
+    "name": "Crisis Communications",
+    "color": "#E67E22",
+    "description": "Emergency response content and crisis management materials for corporate clients",
+    "taskCount": 1
+  },
+  {
+    "id": "4",
+    "name": "Personal Brand Content",
+    "color": "#9B59B6",
+    "description": "Thought leadership articles and social media content for personal LinkedIn presence",
+    "taskCount": 0
+  }
+]

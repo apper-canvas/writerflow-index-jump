@@ -1,0 +1,67 @@
+[
+  {
+    "id": "1",
+    "title": "Ultimate Guide to Content Marketing Strategy",
+    "description": "Comprehensive guide covering content planning, creation, distribution, and measurement for B2B companies",
+    "wordCountTarget": 3500,
+    "wordCountComplete": 2100,
+    "deadline": "2024-01-25T23:59:59.000Z",
+    "status": "drafting",
+    "projectId": "1",
+    "notes": "Include case studies from HubSpot and Salesforce. Add section on AI tools for content creation. Research latest statistics on content marketing ROI.",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-20T14:30:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "10 Email Marketing Automation Workflows",
+    "description": "Detailed breakdown of the most effective email automation sequences for SaaS companies",
+    "wordCountTarget": 2500,
+    "wordCountComplete": 2500,
+    "deadline": "2024-01-22T23:59:59.000Z",
+    "status": "published",
+    "projectId": "1",
+    "notes": "Published on TechCrunch. Great engagement - 15K shares on LinkedIn. Consider creating a follow-up piece on advanced segmentation.",
+    "createdAt": "2024-01-10T09:15:00.000Z",
+    "updatedAt": "2024-01-22T16:45:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "SEO Checklist for Blog Posts",
+    "description": "Complete technical and content SEO checklist for content writers and marketers",
+    "wordCountTarget": 1800,
+    "wordCountComplete": 450,
+    "deadline": "2024-01-30T23:59:59.000Z",
+    "status": "ideas",
+    "projectId": "2",
+    "notes": "Structure: On-page SEO, Technical SEO, Content optimization, Link building. Include Screaming Frog screenshots and Google Search Console examples.",
+    "createdAt": "2024-01-18T11:20:00.000Z",
+    "updatedAt": "2024-01-18T11:20:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Social Media Crisis Management Playbook",
+    "description": "Step-by-step guide for handling negative publicity and crisis situations on social media platforms",
+    "wordCountTarget": 3000,
+    "wordCountComplete": 2800,
+    "deadline": "2024-01-24T23:59:59.000Z",
+    "status": "editing",
+    "projectId": "3",
+    "notes": "Need to add more real-world examples. Check with legal team about disclosure requirements. Include templates for crisis response messages.",
+    "createdAt": "2024-01-12T08:45:00.000Z",
+    "updatedAt": "2024-01-21T13:15:00.000Z"
+  },
+  {
+    "id": "5",
+    "title": "B2B Lead Generation Through LinkedIn",
+    "description": "Advanced strategies for using LinkedIn Sales Navigator and content marketing for lead generation",
+    "wordCountTarget": 2200,
+    "wordCountComplete": 2200,
+    "deadline": "2024-01-19T23:59:59.000Z",
+    "status": "submitted",
+    "projectId": "1",
+    "notes": "Submitted to MarketingProfs. Waiting for editorial feedback. Include personal LinkedIn growth case study showing 300% increase in connections.",
+    "createdAt": "2024-01-08T14:30:00.000Z",
+    "updatedAt": "2024-01-19T09:30:00.000Z"
+  }
+]
