@@ -1,8 +1,8 @@
-import Home from '../pages/Home';
-import Projects from '../pages/Projects';
-import Calendar from '../pages/Calendar';
-import Archive from '../pages/Archive';
-import NotFound from '../pages/NotFound';
+import HomePage from '@/components/pages/HomePage';
+import ProjectsPage from '@/components/pages/ProjectsPage';
+import CalendarPage from '@/components/pages/CalendarPage';
+import ArchivePage from '@/components/pages/ArchivePage';
+import NotFoundPage from '@/components/pages/NotFoundPage';
 
 export const routes = {
   home: {
@@ -10,28 +10,28 @@ export const routes = {
     label: 'All Tasks',
     path: '/',
     icon: 'FileText',
-    component: Home
+component: HomePage
   },
   projects: {
     id: 'projects',
     label: 'Projects',
     path: '/projects',
     icon: 'Folder',
-    component: Projects
+component: ProjectsPage
   },
   calendar: {
     id: 'calendar',
     label: 'Calendar',
     path: '/calendar',
     icon: 'Calendar',
-    component: Calendar
+component: CalendarPage
   },
   archive: {
     id: 'archive',
     label: 'Archive',
     path: '/archive',
     icon: 'Archive',
-    component: Archive
+component: ArchivePage
   }
 };
 
