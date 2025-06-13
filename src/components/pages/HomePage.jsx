@@ -9,7 +9,7 @@ import FilterButtonGroup from '@/components/molecules/FilterButtonGroup';
 import SearchInput from '@/components/molecules/SearchInput';
 import TaskListDisplay from '@/components/organisms/TaskListDisplay';
 import TaskFormModal from '@/components/organisms/TaskFormModal';
-
+import ApperIcon from '@/components/ApperIcon';
 const HomePage = () => {
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
