@@ -1,2 +1,5 @@
-export { default as taskService } from './api/taskService.js';
-export { default as projectService } from './api/projectService.js';
+import taskService from './api/taskService.js';
+import projectService from './api/projectService.js';
+import templateService from './api/templateService.js';
+
+export { taskService, projectService, templateService };

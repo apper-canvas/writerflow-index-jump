@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { taskService, projectService } from '@/services';
+import { taskService, projectService, templateService } from '@/services';
 import Spinner from '@/components/atoms/Spinner';
 import ErrorMessage from '@/components/atoms/ErrorMessage';
 import EmptyState from '@/components/atoms/EmptyState';
@@ -12,7 +12,8 @@ import TaskFormModal from '@/components/organisms/TaskFormModal';
 import ApperIcon from '@/components/ApperIcon';
 const HomePage = () => {
   const [tasks, setTasks] = useState([]);
-  const [projects, setProjects] = useState([]);
+const [projects, setProjects] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -30,9 +31,16 @@ const HomePage = () => {
     setError(null);
     try {
       const [tasksData, projectsData, statsData] = await Promise.all([
-        taskService.getAll(),
+taskService.getAll(),
         projectService.getAll(),
+        templateService.getAll(),
         taskService.getStats()
+      ]);
+      
+      setTasks(tasksData);
+      setProjects(projectsData);
+      setTemplates(templatesData);
+      setStats(statsData);
       ]);
       setTasks(tasksData);
       setProjects(projectsData);
@@ -163,7 +171,8 @@ const HomePage = () => {
           }}
           onSubmit={editingTask ? handleTaskUpdate : handleTaskCreate}
           initialData={editingTask}
-          projects={projects}
+projects={projects}
+          templates={templates}
         />
       )}
     </div>

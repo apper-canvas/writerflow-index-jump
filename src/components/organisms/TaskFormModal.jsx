@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import FormField from '@/components/molecules/FormField';
 import Button from '@/components/atoms/Button';
-import { taskService } from '@/services'; // Assuming you have this service
+import { taskService, templateService } from '@/services';
 import { toast } from 'react-toastify';
 
-const TaskFormModal = ({ isOpen, onClose, onSubmit, initialData, projects }) => {
+const TaskFormModal = ({ isOpen, onClose, onSubmit, initialData, projects, templates = [] }) => {
   const [formData, setFormData] = useState({
     title: initialData?.title || '',
     description: initialData?.description || '',
@@ -15,7 +15,9 @@ const TaskFormModal = ({ isOpen, onClose, onSubmit, initialData, projects }) => 
     projectId: initialData?.projectId || '',
     status: initialData?.status || 'drafting',
     notes: initialData?.notes || ''
-  });
+});
+  
+  const [selectedTemplate, setSelectedTemplate] = useState('');
 
   useEffect(() => {
     if (initialData) {
@@ -41,7 +43,40 @@ const TaskFormModal = ({ isOpen, onClose, onSubmit, initialData, projects }) => 
         notes: ''
       });
     }
-  }, [initialData, isOpen]);
+}, [initialData, isOpen]);
+  
+  const handleApplyTemplate = async (templateId) => {
+    if (!templateId) return;
+    
+    try {
+      const template = await templateService.getById(templateId);
+      if (template) {
+        const deadlineDate = new Date();
+        deadlineDate.setDate(deadlineDate.getDate() + template.deadline);
+        
+        setFormData(prev => ({
+          ...prev,
+          title: template.title,
+          description: template.description,
+          wordCountTarget: template.wordCountTarget,
+          deadline: deadlineDate.toISOString().split('T')[0]
+        }));
+        
+        toast.success('Template applied successfully');
+      }
+    } catch (err) {
+      toast.error('Failed to apply template');
+      console.error('Error applying template:', err);
+    }
+  };
+
+const handleTemplateChange = (e) => {
+    const templateId = e.target.value;
+    setSelectedTemplate(templateId);
+    if (templateId) {
+      handleApplyTemplate(templateId);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,7 +119,29 @@ const TaskFormModal = ({ isOpen, onClose, onSubmit, initialData, projects }) => 
         <h3 className="text-lg font-medium text-surface-900 mb-4">
           {initialData ? 'Edit Task' : 'Create New Task'}
         </h3>
-        
+{templates.length > 0 && (
+          <div className="mb-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-medium text-indigo-900">Quick Start with Template</h3>
+            </div>
+            <select
+              value={selectedTemplate}
+              onChange={handleTemplateChange}
+              className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white text-sm"
+            >
+              <option value="">Select a template...</option>
+              {templates.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.name} ({template.wordCountTarget} words, {template.deadline} day{template.deadline !== 1 ? 's' : ''})
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-indigo-600 mt-2">
+              Selecting a template will auto-fill the form fields below
+            </p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <FormField
             label="Task Title"
