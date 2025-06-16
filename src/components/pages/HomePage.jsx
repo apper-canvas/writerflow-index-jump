@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { taskService, projectService, templateService } from '@/services';
-import Spinner from '@/components/atoms/Spinner';
-import ErrorMessage from '@/components/atoms/ErrorMessage';
-import EmptyState from '@/components/atoms/EmptyState';
-import DashboardStats from '@/components/organisms/DashboardStats';
-import FilterButtonGroup from '@/components/molecules/FilterButtonGroup';
-import SearchInput from '@/components/molecules/SearchInput';
-import TaskListDisplay from '@/components/organisms/TaskListDisplay';
-import TaskFormModal from '@/components/organisms/TaskFormModal';
-import ApperIcon from '@/components/ApperIcon';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { projectService, taskService, templateService } from "@/services";
+import Spinner from "@/components/atoms/Spinner";
+import ErrorMessage from "@/components/atoms/ErrorMessage";
+import EmptyState from "@/components/atoms/EmptyState";
+import DashboardStats from "@/components/organisms/DashboardStats";
+import FilterButtonGroup from "@/components/molecules/FilterButtonGroup";
+import SearchInput from "@/components/molecules/SearchInput";
+import TaskListDisplay from "@/components/organisms/TaskListDisplay";
+import TaskFormModal from "@/components/organisms/TaskFormModal";
+import ApperIcon from "@/components/ApperIcon";
 const HomePage = () => {
   const [tasks, setTasks] = useState([]);
 const [projects, setProjects] = useState([]);
@@ -26,12 +26,12 @@ const [projects, setProjects] = useState([]);
     loadData();
   }, []);
 
-  const loadData = async () => {
+const loadData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const [tasksData, projectsData, statsData] = await Promise.all([
-taskService.getAll(),
+      const [tasksData, projectsData, templatesData, statsData] = await Promise.all([
+        taskService.getAll(),
         projectService.getAll(),
         templateService.getAll(),
         taskService.getStats()
@@ -40,10 +40,6 @@ taskService.getAll(),
       setTasks(tasksData);
       setProjects(projectsData);
       setTemplates(templatesData);
-      setStats(statsData);
-      ]);
-      setTasks(tasksData);
-      setProjects(projectsData);
       setStats(statsData);
     } catch (err) {
       setError(err.message || 'Failed to load data');
