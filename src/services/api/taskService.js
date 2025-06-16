@@ -1,5 +1,296 @@
 import { toast } from 'react-toastify';
 
+// Utility function to ensure SDK is available
+const ensureSDKAvailable = () => {
+  if (!window.ApperSDK) {
+    throw new Error('Apper SDK is not loaded yet');
+  }
+  return window.ApperSDK;
+};
+
+// Create ApperClient instance with proper error handling
+const createApperClient = () => {
+  const { ApperClient } = ensureSDKAvailable();
+  return new ApperClient({
+    apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+    apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+  });
+};
+
+// Utility function to add delay for realistic API simulation
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+const taskService = {
+  // Get all tasks with optional filtering
+  async getAll(filters = {}) {
+    try {
+      await delay(300);
+      
+      const apperClient = createApperClient();
+      
+      // All fields from task table for complete data retrieval
+      const fields = [
+        'Id', 'Name', 'Tags', 'Owner', 'CreatedOn', 'CreatedBy', 
+        'ModifiedOn', 'ModifiedBy', 'title', 'description', 
+        'word_count_target', 'word_count_complete', 'deadline', 
+        'status', 'notes', 'created_at', 'updated_at', 'project_id'
+      ];
+      
+      const params = {
+        fields: fields,
+        orderBy: [
+          {
+            fieldName: 'CreatedOn',
+            SortType: 'DESC'
+          }
+        ]
+      };
+      
+      // Add filters if provided
+      if (filters.status && filters.status.length > 0) {
+        params.where = [
+          {
+            fieldName: 'status',
+            operator: 'ExactMatch',
+            values: filters.status
+          }
+        ];
+      }
+      
+      if (filters.project_id) {
+        const projectFilter = {
+          fieldName: 'project_id',
+          operator: 'ExactMatch',
+          values: [filters.project_id]
+        };
+        
+        if (params.where) {
+          params.where.push(projectFilter);
+        } else {
+          params.where = [projectFilter];
+        }
+      }
+      
+      const response = await apperClient.fetchRecords('task', params);
+      
+      if (!response || !response.data) {
+        return [];
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      toast.error('Failed to load tasks');
+      throw error;
+    }
+  },
+
+  // Get task by ID
+  async getById(taskId) {
+    try {
+      await delay(200);
+      
+      const apperClient = createApperClient();
+      
+      // All fields from task table
+      const fields = [
+        'Id', 'Name', 'Tags', 'Owner', 'CreatedOn', 'CreatedBy', 
+        'ModifiedOn', 'ModifiedBy', 'title', 'description', 
+        'word_count_target', 'word_count_complete', 'deadline', 
+        'status', 'notes', 'created_at', 'updated_at', 'project_id'
+      ];
+      
+      const params = { fields };
+      
+      const response = await apperClient.getRecordById('task', taskId, params);
+      
+      if (!response || !response.data) {
+        throw new Error('Task not found');
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching task ${taskId}:`, error);
+      toast.error('Failed to load task');
+      throw error;
+    }
+  },
+
+  // Create new task
+  async create(taskData) {
+    try {
+      await delay(400);
+      
+      const apperClient = createApperClient();
+      
+      // Only include updateable fields
+      const updateableData = {
+        Name: taskData.Name,
+        Tags: taskData.Tags,
+        Owner: taskData.Owner,
+        title: taskData.title,
+        description: taskData.description,
+        word_count_target: taskData.word_count_target,
+        word_count_complete: taskData.word_count_complete || 0,
+        deadline: taskData.deadline,
+        status: taskData.status || 'ideas',
+        notes: taskData.notes,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        project_id: taskData.project_id
+      };
+      
+      const params = {
+        records: [updateableData]
+      };
+      
+      const response = await apperClient.createRecord('task', params);
+      
+      if (response && response.success && response.results && response.results[0]?.success) {
+        toast.success('Task created successfully');
+        return response.results[0].data;
+      } else {
+        const errorMessage = response.results?.[0]?.message || 'Failed to create task';
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+      toast.error('Failed to create task');
+      throw error;
+    }
+  },
+
+  // Update existing task
+  async update(taskId, taskData) {
+    try {
+      await delay(350);
+      
+      const apperClient = createApperClient();
+      
+      // Only include updateable fields plus Id
+      const updateableData = {
+        Id: taskId,
+        Name: taskData.Name,
+        Tags: taskData.Tags,
+        Owner: taskData.Owner,
+        title: taskData.title,
+        description: taskData.description,
+        word_count_target: taskData.word_count_target,
+        word_count_complete: taskData.word_count_complete,
+        deadline: taskData.deadline,
+        status: taskData.status,
+        notes: taskData.notes,
+        updated_at: new Date().toISOString(),
+        project_id: taskData.project_id
+      };
+      
+      const params = {
+        records: [updateableData]
+      };
+      
+      const response = await apperClient.updateRecord('task', params);
+      
+      if (response && response.success && response.results && response.results[0]?.success) {
+        toast.success('Task updated successfully');
+        return response.results[0].data;
+      } else {
+        const errorMessage = response.results?.[0]?.message || 'Failed to update task';
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error updating task:', error);
+      toast.error('Failed to update task');
+      throw error;
+    }
+  },
+
+  // Delete task
+  async delete(taskId) {
+    try {
+      await delay(250);
+      
+      const apperClient = createApperClient();
+      
+      const params = {
+        RecordIds: [taskId]
+      };
+      
+      const response = await apperClient.deleteRecord('task', params);
+      
+      if (response && response.success && response.results && response.results[0]?.success) {
+        toast.success('Task deleted successfully');
+        return true;
+      } else {
+        const errorMessage = response.results?.[0]?.message || 'Failed to delete task';
+        throw new Error(errorMessage);
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      toast.error('Failed to delete task');
+      throw error;
+    }
+  },
+
+  // Get tasks by status
+  async getByStatus(status) {
+    return this.getAll({ status: [status] });
+  },
+
+  // Get tasks by project
+  async getByProject(projectId) {
+    return this.getAll({ project_id: projectId });
+  },
+
+  // Get upcoming deadlines
+  async getUpcomingDeadlines(days = 7) {
+    try {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + days);
+      
+      const apperClient = createApperClient();
+      
+      const fields = [
+        'Id', 'Name', 'title', 'deadline', 'status', 'project_id'
+      ];
+      
+      const params = {
+        fields: fields,
+        where: [
+          {
+            fieldName: 'deadline',
+            operator: 'LessThanOrEqualTo',
+            values: [endDate.toISOString()]
+          },
+          {
+            fieldName: 'status',
+            operator: 'NotEqualTo',
+            values: ['published']
+          }
+        ],
+        orderBy: [
+          {
+            fieldName: 'deadline',
+            SortType: 'ASC'
+          }
+        ]
+      };
+      
+      const response = await apperClient.fetchRecords('task', params);
+      
+      if (!response || !response.data) {
+        return [];
+      }
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching upcoming deadlines:', error);
+      return [];
+    }
+  }
+};
+
+export default taskService;
+
 class TaskService {
   constructor() {
     // Initialize ApperClient with Project ID and Public Key
